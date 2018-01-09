@@ -1,5 +1,5 @@
 # HIDdenPPAttack
-Attack walkthrough located here *****************
+Attack walkthrough located here https://simpleinfosec.com/2018/01/09/the-hidden-pp-attack-a-non-administrative-remote-shell-for-data-exfiltration/
 
 The idea is to create a Powershell loop which constantly checks for updates to a PS1 file in a mutually shared location. It then collects and executes. Administrative privellages are NOT required for this to function as a remote shell!!!!
 
